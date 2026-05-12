@@ -1,1 +1,19 @@
-node_modules
+# Dependencias
+node_modules/
+
+# Compilación
+dist/
+out-tsc/
+
+# Base de datos local
+database.sqlite
+
+# Variables de entorno y logs
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs
+.vscode/
+.idea/
