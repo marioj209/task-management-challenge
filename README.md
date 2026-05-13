@@ -1,6 +1,6 @@
 # 📋 Task Management System - Challenge Técnico
 
-**Postulante: Mario Julio Pelagatti
+## Postulante: Mario Julio Pelagatti
 
 Sistema de gestión de tareas con jerarquía recursiva, desarrollado para el challenge técnico de 42i.
 
