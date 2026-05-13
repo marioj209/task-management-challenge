@@ -1,0 +1,22 @@
+services:
+  backend:
+    build: 
+      context: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - sqlite_data:/app/data
+      - /app/node_modules
+
+  frontend:
+    build: 
+      context: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  sqlite_data:
