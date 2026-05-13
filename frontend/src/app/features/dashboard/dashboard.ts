@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, computed } from '@angular/core'; // <-- Importamos computed
 import { TaskService } from '../../core/services/task';
 import { TaskCreateDTO } from '../../core/models/task.model';
 import { TaskMetricsComponent } from '../../shared/components/task-metrics/task-metrics';
@@ -17,14 +17,27 @@ export class DashboardComponent implements OnInit {
   public taskService = inject(TaskService);
   private router = inject(Router);
 
+  // Creamos una señal "computada" que se actualiza sola
+  public rootTasks = computed(() => {
+    // 1. Leemos todas las tareas del servicio (asumiendo que la señal se llama tasks)
+    const allTasks = this.taskService.tasks(); 
+
+    // 2. Filtramos solo las que son tareas principales (padres)
+    const mainTasks = allTasks.filter(t => t.parent_task_id === null);
+
+    // 3. Devolvemos esas tareas principales, inyectándoles el contador
+    return mainTasks.map(task => ({
+      ...task,
+      subtasksCount: allTasks.filter(t => t.parent_task_id === task.id).length
+    }));
+  });
+
   ngOnInit(): void {
-    // Cuando el dashboard carga, le decimos al servicio que traiga todo.
     this.taskService.loadTasks();
     this.taskService.loadMetrics();
   }
 
   onTaskCreated(taskDto: TaskCreateDTO): void {
-    // Como estamos en el Dashboard (raíz), el parent_task_id siempre será null
     this.taskService.createTask(taskDto);
   }
 
@@ -33,7 +46,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onViewTaskDetails(id: string): void {
-    // Navegamos a la vista de detalle 
     this.router.navigate(['/task', id]);
   }
 }

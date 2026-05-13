@@ -1,145 +1,228 @@
-.detail-container {
+/* Contenedor Principal */
+.task-detail-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 2rem;
 }
 
+/* Botón Volver */
 .btn-back {
   background: none;
   border: none;
-  color: #3b82f6;
-  font-size: 1rem;
-  font-weight: 600;
+  color: #6c757d;
   cursor: pointer;
-  margin-bottom: 24px;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
   padding: 0;
   transition: color 0.2s;
 }
 
 .btn-back:hover {
-  color: #1d4ed8;
+  color: #343a40;
   text-decoration: underline;
 }
 
-.task-hero-card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 32px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  margin-bottom: 32px;
+/* Cabecera (Header Compartido) */
+.task-header {
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
-.hero-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-  gap: 24px;
-}
-
-.hero-title {
-  margin: 0;
+.title-section h1 {
+  margin: 0 0 0.5rem 0;
+  color: #212529;
   font-size: 2rem;
-  color: #0f172a;
-  word-break: break-word;
 }
 
-.hero-badges {
-  display: flex;
-  gap: 8px;
-}
-
-/* Reutilizamos los colores de las badges del task-list */
-.badge {
-  font-size: 0.75rem;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.status-todo { background: #f1f5f9; color: #475569; }
-.status-in_progress { background: #dbeafe; color: #2563eb; }
-.status-done { background: #dcfce3; color: #16a34a; }
-.urgency-low { background: #f3f4f6; color: #6b7280; }
-.urgency-medium { background: #fef3c7; color: #d97706; }
-.urgency-high { background: #ffedd5; color: #ea580c; }
-.urgency-critical { background: #fee2e2; color: #dc2626; }
-
-.hero-description {
+.title-section .description {
+  color: #495057;
   font-size: 1.1rem;
-  color: #475569;
   line-height: 1.6;
-  margin-bottom: 24px;
+  margin: 0 0 1.5rem 0;
 }
 
-.hero-actions {
+/* Inputs en Modo Edición */
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 15px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #339af0;
+  box-shadow: 0 0 0 3px rgba(51, 154, 240, 0.1);
+}
+
+.title-input {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.desc-input {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.short-input {
+  width: 120px;
+  margin-left: 10px;
+  display: inline-block;
+}
+
+/* Validaciones */
+.error-text {
+  color: #dc3545;
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* Badges y Esfuerzo */
+.effort-assignment {
+  margin-bottom: 1.5rem;
+}
+
+.effort-badge {
+  background-color: #e9ecef;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+  color: #495057;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+/* Botones de Acción (Guardar/Cancelar/Editar) */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-edit-mode {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-edit-mode:hover {
+  background-color: #ffc107;
+}
+
+.btn-save {
+  background-color: #20c997;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-save:hover:not(:disabled) {
+  background-color: #12b886;
+}
+
+.btn-save:disabled {
+  background-color: #adb5bd;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background-color: #e9ecef;
+}
+
+/* Controles de Estado Rápido */
+.status-controls {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: #f8fafc;
-  padding: 16px;
+  gap: 15px;
+  margin-bottom: 2rem;
+  background-color: #f8f9fa;
+  padding: 1rem 1.5rem;
   border-radius: 8px;
-  border: 1px solid #f1f5f9;
 }
 
-.action-label {
+.status-controls .label {
   font-weight: 600;
-  color: #64748b;
-  margin-right: 8px;
+  color: #495057;
 }
 
-.btn-action {
+.status-btn {
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  color: white;
+  transition: transform 0.1s;
 }
 
-.btn-action:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.status-btn:active {
+  transform: scale(0.97);
 }
 
-.btn-todo { background: #e2e8f0; color: #475569; }
-.btn-progress { background: #bfdbfe; color: #1d4ed8; }
-.btn-done { background: #bbf7d0; color: #15803d; }
-
-.section-title {
-  color: #0f172a;
-  margin-bottom: 16px;
+.status-btn.progress {
+  background-color: #339af0;
 }
 
+.status-btn.done {
+  background-color: #20c997;
+}
+
+/* Línea Divisoria */
 .divider {
   border: 0;
   height: 1px;
-  background: #e2e8f0;
-  margin: 40px 0;
+  background: #e9ecef;
+  margin: 2rem 0;
 }
 
-.subtasks-layout {
+/* Grilla de Subtareas (Layout) */
+.detail-grid {
   display: grid;
   grid-template-columns: 350px 1fr;
-  gap: 32px;
+  gap: 2rem;
   align-items: start;
 }
 
-.loading-state {
-  text-align: center;
-  padding: 60px;
-  font-size: 1.2rem;
-  color: #64748b;
+.section-title {
+  font-size: 1.25rem;
+  color: #343a40;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
 }
 
 /* Responsive */
 @media (max-width: 900px) {
-  .subtasks-layout {
+  .detail-grid {
     grid-template-columns: 1fr;
-  }
-  .hero-header {
-    flex-direction: column;
   }
 }

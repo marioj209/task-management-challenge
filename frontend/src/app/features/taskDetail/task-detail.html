@@ -1,57 +1,84 @@
-<div class="detail-container">
-  <!-- Botón de regreso dinámico -->
-  <button class="btn-back" (click)="goBack()">
-    ⬅ Volver
-  </button>
+<div class="task-detail-container">
+  <button class="btn-back" (click)="goBack()">← Volver al listado</button>
 
-  @if (currentTask(); as task) {
-    <!-- Tarjeta de metadatos de la tarea actual -->
-    <div class="task-hero-card">
-      <div class="hero-header">
-        <h1 class="hero-title">{{ task.title }}</h1>
-        <div class="hero-badges">
-          <span class="badge status-{{ task.status | lowercase }}">{{ task.status }}</span>
-          <span class="badge urgency-{{ task.urgency | lowercase }}">{{ task.urgency }}</span>
-        </div>
+  <!-- MODO EDICIÓN -->
+  @if (isEditing()) {
+    <form [formGroup]="editForm" (ngSubmit)="saveChanges()" class="task-header edit-mode">
+      <div class="title-section">
+        <input 
+          type="text" 
+          formControlName="title" 
+          class="form-control title-input" 
+          placeholder="Título de la tarea">
+        <textarea 
+          formControlName="description" 
+          class="form-control desc-input" 
+          placeholder="Descripción..."></textarea>
       </div>
-      
-      @if (task.description) {
-        <p class="hero-description">{{ task.description }}</p>
-      }
 
-      <!-- Acciones de la Tarea -->
-      <div class="hero-actions">
-        <span class="action-label">Mover a:</span>
-        <button class="btn-action btn-todo" (click)="updateTaskStatus('TODO')" [disabled]="task.status === 'TODO'">Por Empezar</button>
-        <button class="btn-action btn-progress" (click)="updateTaskStatus('IN_PROGRESS')" [disabled]="task.status === 'IN_PROGRESS'">En Progreso</button>
-        <button class="btn-action btn-done" (click)="updateTaskStatus('DONE')" [disabled]="task.status === 'DONE'">Finalizar</button>
+      <div class="effort-assignment">
+
+        <label for="effortInput">Personal asignado:</label>
+        <input
+          id="effortInput" 
+          type="number" 
+          formControlName="estimated_effort" 
+          class="form-control short-input" 
+          min="0">
+        
+        @if (editForm.controls.estimated_effort.invalid && editForm.controls.estimated_effort.dirty) {
+          <span class="error-text">No puede ser un número negativo</span>
+        }
       </div>
-    </div>
 
-    <!-- Métricas Específicas de esta Sub-jerarquía -->
-    <h3 class="section-title">📊 Métricas de esta rama</h3>
-    <app-task-metrics [metrics]="taskService.metrics()"></app-task-metrics>
-
-    <hr class="divider">
-
-    <!-- Sección de Gestión de Subtareas (Reutilizando componentes) -->
-    <div class="subtasks-layout">
-      <div class="subtasks-form-section">
-        <app-task-form (createTask)="onSubtaskCreated($event)"></app-task-form>
+      <div class="action-buttons">
+        <button type="button" class="btn-cancel" (click)="cancelEdit()">❌ Cancelar</button>
+        <button type="submit" class="btn-save" [disabled]="editForm.invalid">💾 Guardar Cambios</button>
       </div>
-      
-      <div class="subtasks-list-section">
-        <app-task-list 
-          [tasks]="subtasks()" 
-          (deleteTask)="onDeleteSubtask($event)"
-          (viewDetails)="onViewSubtaskDetails($event)">
-        </app-task-list>
+    </form>
+  } 
+  
+  <!-- MODO LECTURA -->
+  @else {
+    <header class="task-header read-mode">
+      <div class="title-section">
+        <h1>{{ currentTask()?.title }}</h1>
+        <p class="description">{{ currentTask()?.description }}</p>
       </div>
-    </div>
-  } @else {
-    <!-- Estado de carga -->
-    <div class="loading-state">
-      Cargando detalles de la tarea...
-    </div>
+
+      <div class="effort-display">
+        <span class="effort-badge">👥 Empleados: {{ currentTask()?.estimated_effort }}</span>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn-edit-mode" (click)="toggleEditMode()">✏️ Editar Tarea</button>
+      </div>
+    </header>
   }
+
+  <!-- CONTROLES DE ESTADO RÁPIDO -->
+  <div class="status-controls">
+    <span class="label">Mover a:</span>
+    <button class="status-btn progress" (click)="updateTaskStatus('IN_PROGRESS')">En Progreso</button>
+    <button class="status-btn done" (click)="updateTaskStatus('DONE')">Finalizar</button>
+  </div>
+
+  <hr class="divider">
+
+  <!-- GRILLA DE SUBTAREAS -->
+  <div class="detail-grid">
+    <section class="form-section">
+      <h3 class="section-title"> Agregar Subtarea</h3>
+      <app-task-form (createTask)="onSubtaskCreated($event)"></app-task-form>
+    </section>
+
+    <section class="subtasks-section">
+    
+      <app-task-list 
+        [tasks]="subtasks()" 
+        (viewDetails)="onViewSubtaskDetails($event)"
+        (deleteTask)="onDeleteSubtask($event)">
+      </app-task-list>
+    </section>
+  </div>
 </div>

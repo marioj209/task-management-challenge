@@ -2,9 +2,9 @@
   <h3 class="list-title">📋 Desglose de Tareas</h3>
 
   <div class="task-grid">
-    <!-- El nuevo Control Flow de Angular -->
     @for (task of tasks(); track task.id) {
-      <div class="task-card">
+      <!-- 1. Agregamos el evento click a toda la tarjeta -->
+      <div class="task-card" (click)="onViewDetails(task.id)">
         <div class="task-header">
           <h4 class="task-title">{{ task.title }}</h4>
           <div class="task-badges">
@@ -18,18 +18,29 @@
         }
 
         <div class="task-footer">
-          <span class="task-effort">⏱️ Esfuerzo: {{ task.estimated_effort }}</span>
+          <span class="task-effort">Cant. de empleados: {{ task.estimated_effort }}</span>
 
           <div class="task-actions">
-            <!-- Este botón nos servirá para la vista de subtareas -->
-            <button class="btn-icon btn-view" (click)="onViewDetails(task.id)" title="Ver Detalles">
-              👁️ Detalle
-            </button>
-            <button class="btn-icon btn-delete" (click)="onDelete(task.id)" title="Eliminar">
+            
+            <!-- 3. Detenemos la propagación para que al eliminar no entre al detalle -->
+            <button class="btn-icon btn-delete" (click)="$event.stopPropagation(); onDelete(task.id)" title="Eliminar">
               🗑️ Eliminar
             </button>
           </div>
         </div>
+
+        @if (task.subtasksCount !== undefined) {
+          <div class="subtask-indicator">
+            <span class="icon">📂</span>
+            @if (task.subtasksCount === 0) {
+              <span class="text">Sin subtareas</span>
+            } @else if (task.subtasksCount === 1) {
+              <span class="text">Tiene 1 subtarea</span>
+            } @else {
+              <span class="text">Tiene {{ task.subtasksCount }} subtareas</span>
+            }
+          </div>
+        }
       </div>
     } @empty {
       <div class="empty-state">

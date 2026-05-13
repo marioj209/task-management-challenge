@@ -14,6 +14,7 @@ export interface Task {
   parent_task_id: string | null; // null si es una tarea raíz, string si es subtarea
   created_at?: string; // Opcional por si el backend lo devuelve
   updated_at?: string; // Opcional por si el backend lo devuelve
+  subtasksCount?: number;
 }
 
 // 3. DTO para CREAR una tarea (No tiene ID ni fechas automáticas)

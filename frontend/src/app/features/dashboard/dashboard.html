@@ -5,7 +5,7 @@
   </div>
   
   <!-- Inyectamos las métricas globales -->
-  <app-task-metrics [metrics]="taskService.metrics()"></app-task-metrics>
+  <app-task-metrics [tasks]="taskService.tasks()"></app-task-metrics>
 
   <hr class="divider">
 
@@ -16,12 +16,13 @@
     </div>
     
     <div class="list-section">
-      <!-- Le pasamos la lista de tareas usando el Signal tasks() -->
+      <!-- AHORA pasamos rootTasks() en vez de taskService.tasks() -->
       <app-task-list 
-        [tasks]="taskService.tasks()" 
+        [tasks]="rootTasks()" 
         (deleteTask)="onDeleteTask($event)"
         (viewDetails)="onViewTaskDetails($event)">
       </app-task-list>
     </div>
   </div>
+  
 </main>

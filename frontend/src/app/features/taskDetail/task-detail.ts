@@ -1,17 +1,17 @@
 import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { TaskService } from '../../core/services/task';
-import { Task, TaskCreateDTO, TaskStatus } from '../../core/models/task.model';
-import { TaskMetricsComponent } from '../../shared/components/task-metrics/task-metrics';
+import { Task, TaskStatus, TaskCreateDTO } from '../../core/models/task.model';
 import { TaskListComponent } from '../../shared/components/task-list/task-list';
 import { TaskFormComponent } from '../../shared/components/task-form/task-form';
-import { LowerCasePipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [TaskMetricsComponent, TaskListComponent, TaskFormComponent,LowerCasePipe],
+  imports: [TaskListComponent, TaskFormComponent, ReactiveFormsModule],
   templateUrl: './task-detail.html',
   styleUrl: './task-detail.css'
 })
@@ -20,14 +20,20 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   public taskService = inject(TaskService);
 
-  // Estado local específico de esta vista
   public currentTask = signal<Task | null>(null);
   public subtasks = signal<Task[]>([]);
+  public isEditing = signal<boolean>(false);
+  
   private currentTaskId = '';
   private routeSub: Subscription = new Subscription();
 
+  public editForm = new FormGroup({
+    title: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+    description: new FormControl<string>('', { nonNullable: true }),
+    estimated_effort: new FormControl<number>(0, { nonNullable: true, validators: [Validators.min(0)] })
+  });
+
   ngOnInit(): void {
-    // Escuchamos los cambios en la URL por si navegamos hacia una subtarea
     this.routeSub = this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -38,38 +44,81 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.routeSub.unsubscribe(); // Evitamos memory leaks
+    this.routeSub.unsubscribe();
   }
 
   private loadFullTaskContext(): void {
-    // 1. Cargamos la tarea actual
     this.taskService.getTaskById(this.currentTaskId).subscribe(task => {
       this.currentTask.set(task);
+      this.editForm.patchValue({
+        title: task.title,
+        description: task.description,
+        estimated_effort: task.estimated_effort
+      });
     });
     
-    // 2. Cargamos las subtareas directas
     this.taskService.getSubtasks(this.currentTaskId).subscribe(tasks => {
       this.subtasks.set(tasks);
     });
-    
-    // 3. ¡Magia recursiva! Pedimos las métricas SOLO para esta rama
-    this.taskService.loadMetrics(this.currentTaskId);
   }
 
-  // Interceptamos la creación del form para inyectarle el ID del padre actual
+  toggleEditMode(): void {
+    if (!this.isEditing()) {
+      const current = this.currentTask();
+      if (current) {
+        this.editForm.patchValue({
+          title: current.title,
+          description: current.description,
+          estimated_effort: current.estimated_effort
+        });
+      }
+    }
+    this.isEditing.set(!this.isEditing());
+  }
+
+  cancelEdit(): void {
+    this.isEditing.set(false);
+  }
+
+  saveChanges(): void {
+    if (this.editForm.valid) {
+      const formValues = this.editForm.getRawValue();
+      
+      const updatePayload: Partial<Task> = {
+        title: formValues.title,
+        description: formValues.description,
+        estimated_effort: formValues.estimated_effort
+      };
+
+      if (updatePayload.estimated_effort === 0) {
+        updatePayload.status = 'TODO';
+      }
+
+      this.taskService.updateTask(this.currentTaskId, updatePayload);
+      
+      setTimeout(() => {
+        this.loadFullTaskContext();
+        this.isEditing.set(false);
+      }, 300);
+    }
+  }
+
   onSubtaskCreated(dto: TaskCreateDTO): void {
     const subtaskPayload: TaskCreateDTO = {
       ...dto,
-      parent_task_id: this.currentTaskId // Sobrescribimos el null por el ID actual
+      parent_task_id: this.currentTaskId 
     };
-
-    // Usamos el servicio. (Idealmente, en el servicio esto debería devolver un Observable 
-    // para recargar loadFullTaskContext() al terminar. Por ahora usamos un timeout preventivo 
-    // o asumimos que la vista se refresca si el servicio dispara un global refresh).
     this.taskService.createTask(subtaskPayload);
-    
-    // Forzamos la recarga visual de las subtareas tras medio segundo para dar tiempo a la DB
     setTimeout(() => this.loadFullTaskContext(), 500); 
+  }
+
+  updateTaskStatus(newStatus: TaskStatus): void {
+    this.taskService.updateTask(this.currentTaskId, { status: newStatus });
+    setTimeout(() => this.router.navigate(['/']), 300);
+  }
+
+  onViewSubtaskDetails(id: string): void {
+    this.router.navigate(['/task', id]);
   }
 
   onDeleteSubtask(id: string): void {
@@ -77,23 +126,11 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     setTimeout(() => this.loadFullTaskContext(), 500);
   }
 
-  onViewSubtaskDetails(id: string): void {
-    // Navegamos un nivel más profundo en la jerarquía
-    this.router.navigate(['/task', id]);
-  }
-
-  updateTaskStatus(newStatus: TaskStatus): void {
-    this.taskService.updateTask(this.currentTaskId, { status: newStatus });
-    setTimeout(() => this.loadFullTaskContext(), 500);
-  }
-
   goBack(): void {
     const parentId = this.currentTask()?.parent_task_id;
     if (parentId) {
-      // Si tiene padre, subimos un nivel
       this.router.navigate(['/task', parentId]);
     } else {
-      // Si es raíz, volvems al Dashboard
       this.router.navigate(['/']);
     }
   }
