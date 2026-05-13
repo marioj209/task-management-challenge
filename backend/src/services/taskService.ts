@@ -9,6 +9,10 @@ export class TaskService {
   }
 
   async createTask(data: CreateTaskDTO) {
+    if (data.estimated_effort !== undefined && data.estimated_effort < 0) {
+      throw new Error('ValidationError: El esfuerzo estimado no puede ser negativo');
+    }
+    
     return await this.taskRepository.create(data);
   }
   async getAllTasks() {
@@ -19,6 +23,15 @@ export class TaskService {
   }
   async deleteTask(id: string) {
     return await this.taskRepository.delete(id);
+  }
+  async getTaskById(id: string) {
+    // Busca una tarea específica por su ID
+    return await this.taskRepository.findById(id);
+  }
+
+  async getSubtasks(parentId: string) {
+    // Busca todas las tareas que tengan como padre al ID que le pasamos
+    return await this.taskRepository.findByParentId(parentId);
   }
 
   async getMetrics(rootTaskId?: string) {
@@ -62,4 +75,5 @@ export class TaskService {
       effort_completed: doneEffort,
     };
   }
+  
 }

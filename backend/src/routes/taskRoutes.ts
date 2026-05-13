@@ -1,15 +1,20 @@
 import { Router } from 'express';
-import { TaskController } from '../controllers/taskController';
+import { TaskController } from '../controllers/taskController'; // Ajustá el path si es distinto
 
 const router = Router();
-
-// Rutas de métricas (Debe ir antes de /:id para que Express no confunda "metrics" con un ID)
-router.get('/metrics', TaskController.getMetrics);
-
-// Rutas CRUD estándar
+console.log("¡Cargando las rutas de tareas!")
+// 1. Rutas generales (Sin ID)
 router.post('/', TaskController.createTask);
 router.get('/', TaskController.getAllTasks);
-router.put('/:id', TaskController.updateTask);
+
+// 2. Rutas de Métricas 
+router.get('/metrics', TaskController.getMetrics);
+router.get('/metrics/:id', TaskController.getMetrics); 
+
+// 3. Rutas específicas con ID
+router.get('/:id/subtasks', TaskController.getSubtasks); 
+router.get('/:id', TaskController.getTaskById);          
+router.patch('/:id', TaskController.updateTask);
 router.delete('/:id', TaskController.deleteTask);
 
 export default router;

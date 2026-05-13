@@ -58,4 +58,12 @@ describe('TaskService - Lógica de Negocio (Métricas y Recursividad)', () => {
     expect(metrics.effort_not_started).toBe(30); // 10 + 20
     expect(metrics.effort_in_progress).toBe(5);
   });
+
+it('debería fallar al crear una tarea con esfuerzo negativo', async () => {
+    await expect(taskService.createTask({
+      title: 'Tarea Inválida',
+      description: 'Prueba de error',
+      estimated_effort: -10
+    })).rejects.toThrow('ValidationError: El esfuerzo estimado no puede ser negativo');
+  });
 });

@@ -10,8 +10,13 @@ export class TaskRepository {
     return await Task.findAll();
   }
 
-  async findById(id: string): Promise<Task | null> {
-    return await Task.findByPk(id);
+async findById(id: string): Promise<Task | null> {
+  return await Task.findOne({ where: { id } }); // ← cambiá esto
+}
+  async findByParentId(parentId: string): Promise<Task[]> {
+    return await Task.findAll({ 
+      where: { parent_task_id: parentId } 
+    });
   }
 
   async update(id: string, data: UpdateTaskDTO): Promise<[number, Task[]]> {
