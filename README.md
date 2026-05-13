@@ -78,9 +78,9 @@ Para ejecutar el proyecto de forma automatizada, asegúrate de tener instalado:
 
 El proyecto está completamente dockerizado. Para levantar la base de datos, el backend y el frontend con un solo comando, ejecuta en la raíz del proyecto:
 
-\`\`\`bash
+```bash
 docker compose up --build
-\`\`\`
+```
 
 Una vez que finalice la construcción de las imágenes, accede a:
 
