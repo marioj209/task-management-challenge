@@ -58,5 +58,55 @@ El repositorio sigue una estructura monorepo lógica para facilitar la evaluaci�
 
 Durante el desarrollo, se tomaron las siguientes decisiones de diseño:
 - **Cálculo en Backend vs Frontend:** Se decidió que la lógica recursiva para sumar los puntos de esfuerzo resida en el backend (vía el endpoint de métricas). Esto asegura que el cliente (Nginx/Angular) se mantenga ligero y delegue el procesamiento pesado al servidor.
-- **SQLite vs Bases Externas:** Se optó por SQLite en lugar de un motor como PostgreSQL para eliminar la necesidad de contenedores adicionales, garantizando que los evaluadores puedan levantar la prueba técnica de forma instantánea y sin fricciones de infraestructura.
+- **SQLite vs Bases Externas:** Se optó por SQLite en lugar de un motor como PostgreSQL para eliminar la necesidad de contenedores adicionales.
 - **Separación visual del esfuerzo:** En la UI, la tarjeta individual muestra el esfuerzo propio de la tarea, mientras que el panel superior muestra el esfuerzo acumulado (padre + hijos). Esto se hizo intencionalmente para no confundir al usuario sobre la asignación directa vs. la carga global.
+
+## 🛠️ Instalación y Ejecución
+
+### Prerrequisitos
+Para ejecutar el proyecto de forma automatizada, asegúrate de tener instalado:
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- Git
+
+### Ejecución rápida (Recomendada)
+El proyecto está completamente dockerizado. Para levantar la base de datos, el backend y el frontend con un solo comando, ejecuta en la raíz del proyecto:
+
+\`\`\`bash
+docker compose up --build
+\`\`\`
+
+Una vez que finalice la construcción de las imágenes, accede a:
+- **Frontend (UI):** http://localhost:8080
+- **Backend (API):** http://localhost:3000
+
+*Nota: Para detener los contenedores, utiliza `Ctrl + C` y luego ejecuta `docker compose down` para limpiar los recursos.*
+
+### Ejecución local (Modo Desarrollo)
+Si prefieres ejecutar el proyecto sin Docker, necesitarás Node.js (v20+) y Angular CLI.
+
+**1. Levantar el Backend:**
+\`\`\`bash
+cd backend
+npm install
+npm run build
+npm start
+\`\`\`
+*(SQLite creará automáticamente el archivo de la base de datos de forma local, no requieres configuración extra).*
+
+**2. Levantar el Frontend:**
+En una nueva terminal:
+\`\`\`bash
+cd frontend
+npm install
+ng serve
+\`\`\`
+*(El frontend estará disponible en http://localhost:4200).*
+
+## 🤖 Desarrollo Asistido por IA
+
+Este proyecto fue desarrollado adoptando prácticas modernas de *AI-Assisted Development* (utilizando Gemini / GitHub Copilot). La Inteligencia Artificial se utilizó estrictamente como una herramienta de optimización bajo las siguientes directrices:
+
+- **Reglas de Arquitectura:** Se definió un archivo `ai-rules.md` con instrucciones estrictas para forzar a la IA a respetar principios SOLID, tipado fuerte en TypeScript y buenas prácticas de Angular.
+- **Casos de uso principales:** Generación de *boilerplate*, estructuración de pruebas unitarias (Jest), y resolución de conflictos de entorno en la configuración de Docker con binarios de SQLite.
+- **Supervisión Humana:** La lógica de negocio core (especialmente los algoritmos de cálculo recursivo de esfuerzos) y las decisiones de diseño arquitectónico fueron concebidas, revisadas y validadas manualmente para asegurar que cumplan con los requerimientos técnicos del challenge.
