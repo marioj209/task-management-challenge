@@ -1,0 +1,27 @@
+<main class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>🚀 Panel de Control</h1>
+    <p class="subtitle">Gestión de carga de trabajo del equipo</p>
+  </div>
+  
+  <!-- Inyectamos las métricas globales -->
+  <app-task-metrics [metrics]="taskService.metrics()"></app-task-metrics>
+
+  <hr class="divider">
+
+  <div class="dashboard-layout">
+    <div class="form-section">
+      <!-- Escuchamos el evento (createTask) y ejecutamos onTaskCreated -->
+      <app-task-form (createTask)="onTaskCreated($event)"></app-task-form>
+    </div>
+    
+    <div class="list-section">
+      <!-- Le pasamos la lista de tareas usando el Signal tasks() -->
+      <app-task-list 
+        [tasks]="taskService.tasks()" 
+        (deleteTask)="onDeleteTask($event)"
+        (viewDetails)="onViewTaskDetails($event)">
+      </app-task-list>
+    </div>
+  </div>
+</main>

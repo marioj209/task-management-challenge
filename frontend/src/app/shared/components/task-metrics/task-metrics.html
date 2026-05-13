@@ -1,0 +1,26 @@
+<div class="metrics-container">
+  <div class="metrics-grid">
+    
+    <div class="metric-card card-total">
+      <span class="metric-label">Esfuerzo Total</span>
+      <!-- Llamamos al Signal usando los paréntesis () y accedemos a la propiedad -->
+      <span class="metric-value">{{ metrics().total_estimated_effort }}</span>
+    </div>
+
+    <div class="metric-card card-todo">
+      <span class="metric-label">Por Empezar</span>
+      <span class="metric-value">{{ metrics().effort_not_started }}</span>
+    </div>
+
+    <div class="metric-card card-progress">
+      <span class="metric-label">En Progreso</span>
+      <span class="metric-value">{{ metrics().effort_in_progress }}</span>
+    </div>
+
+    <div class="metric-card card-done">
+      <span class="metric-label">Terminado</span>
+      <span class="metric-value">{{ metrics().effort_completed }}</span>
+    </div>
+
+  </div>
+</div>

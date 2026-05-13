@@ -1,0 +1,62 @@
+.metrics-container {
+  margin-bottom: 32px;
+}
+
+.metrics-grid {
+  display: grid;
+  /* Esta línea es pura magia responsiva: se adapta sin usar @media queries */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.metric-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: transform 0.2s;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.metric-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+}
+
+/* Colores semánticos para el borde superior de cada métrica */
+.card-total {
+  border-top: 4px solid #64748b;
+}
+
+.card-todo {
+  border-top: 4px solid #cbd5e1;
+}
+
+.card-progress {
+  border-top: 4px solid #3b82f6;
+}
+
+.card-done {
+  border-top: 4px solid #10b981;
+}

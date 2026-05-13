@@ -1,0 +1,40 @@
+<div class="task-list-container">
+  <h3 class="list-title">📋 Desglose de Tareas</h3>
+
+  <div class="task-grid">
+    <!-- El nuevo Control Flow de Angular -->
+    @for (task of tasks(); track task.id) {
+      <div class="task-card">
+        <div class="task-header">
+          <h4 class="task-title">{{ task.title }}</h4>
+          <div class="task-badges">
+            <span class="badge status-{{ task.status | lowercase }}">{{ task.status }}</span>
+            <span class="badge urgency-{{ task.urgency | lowercase }}">{{ task.urgency }}</span>
+          </div>
+        </div>
+
+        @if (task.description) {
+          <p class="task-desc">{{ task.description }}</p>
+        }
+
+        <div class="task-footer">
+          <span class="task-effort">⏱️ Esfuerzo: {{ task.estimated_effort }}</span>
+
+          <div class="task-actions">
+            <!-- Este botón nos servirá para la vista de subtareas -->
+            <button class="btn-icon btn-view" (click)="onViewDetails(task.id)" title="Ver Detalles">
+              👁️ Detalle
+            </button>
+            <button class="btn-icon btn-delete" (click)="onDelete(task.id)" title="Eliminar">
+              🗑️ Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <p>No hay tareas registradas en la base de datos. ¡Empezá creando la primera!</p>
+      </div>
+    }
+  </div>
+</div>

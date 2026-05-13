@@ -1,0 +1,57 @@
+<div class="detail-container">
+  <!-- Botón de regreso dinámico -->
+  <button class="btn-back" (click)="goBack()">
+    ⬅ Volver
+  </button>
+
+  @if (currentTask(); as task) {
+    <!-- Tarjeta de metadatos de la tarea actual -->
+    <div class="task-hero-card">
+      <div class="hero-header">
+        <h1 class="hero-title">{{ task.title }}</h1>
+        <div class="hero-badges">
+          <span class="badge status-{{ task.status | lowercase }}">{{ task.status }}</span>
+          <span class="badge urgency-{{ task.urgency | lowercase }}">{{ task.urgency }}</span>
+        </div>
+      </div>
+      
+      @if (task.description) {
+        <p class="hero-description">{{ task.description }}</p>
+      }
+
+      <!-- Acciones de la Tarea -->
+      <div class="hero-actions">
+        <span class="action-label">Mover a:</span>
+        <button class="btn-action btn-todo" (click)="updateTaskStatus('TODO')" [disabled]="task.status === 'TODO'">Por Empezar</button>
+        <button class="btn-action btn-progress" (click)="updateTaskStatus('IN_PROGRESS')" [disabled]="task.status === 'IN_PROGRESS'">En Progreso</button>
+        <button class="btn-action btn-done" (click)="updateTaskStatus('DONE')" [disabled]="task.status === 'DONE'">Finalizar</button>
+      </div>
+    </div>
+
+    <!-- Métricas Específicas de esta Sub-jerarquía -->
+    <h3 class="section-title">📊 Métricas de esta rama</h3>
+    <app-task-metrics [metrics]="taskService.metrics()"></app-task-metrics>
+
+    <hr class="divider">
+
+    <!-- Sección de Gestión de Subtareas (Reutilizando componentes) -->
+    <div class="subtasks-layout">
+      <div class="subtasks-form-section">
+        <app-task-form (createTask)="onSubtaskCreated($event)"></app-task-form>
+      </div>
+      
+      <div class="subtasks-list-section">
+        <app-task-list 
+          [tasks]="subtasks()" 
+          (deleteTask)="onDeleteSubtask($event)"
+          (viewDetails)="onViewSubtaskDetails($event)">
+        </app-task-list>
+      </div>
+    </div>
+  } @else {
+    <!-- Estado de carga -->
+    <div class="loading-state">
+      Cargando detalles de la tarea...
+    </div>
+  }
+</div>

@@ -1,0 +1,133 @@
+.task-list-container {
+  margin-top: 24px;
+}
+
+.list-title {
+  color: #0f172a;
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 10px;
+}
+
+/* Grilla Responsiva Mágica */
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.task-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.task-title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1e293b;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.task-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.badge {
+  font-size: 0.65rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Colores Dinámicos de Estado */
+.status-todo { background: #f1f5f9; color: #475569; }
+.status-in_progress { background: #dbeafe; color: #2563eb; }
+.status-done { background: #dcfce3; color: #16a34a; }
+
+/* Colores Dinámicos de Urgencia */
+.urgency-low { background: #f3f4f6; color: #6b7280; }
+.urgency-medium { background: #fef3c7; color: #d97706; }
+.urgency-high { background: #ffedd5; color: #ea580c; }
+.urgency-critical { background: #fee2e2; color: #dc2626; }
+
+.task-desc {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  flex-grow: 1; /* Empuja el footer hacia abajo */
+}
+
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 12px;
+  margin-top: auto;
+}
+
+.task-effort {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.task-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  background: none;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-view { color: #3b82f6; }
+.btn-view:hover { background: #eff6ff; border-color: #3b82f6; }
+
+.btn-delete { color: #ef4444; }
+.btn-delete:hover { background: #fef2f2; border-color: #ef4444; }
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 1rem;
+}
