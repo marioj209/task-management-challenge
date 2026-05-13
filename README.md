@@ -46,6 +46,7 @@ El repositorio sigue una estructura monorepo lógica para facilitar la evaluaci�
 ├── docker-compose.yml       # Orquestador general
 ├── ai-rules.md              # Reglas de arquitectura
 └── README.md                # Documentación
+```
 
 ## ✨ Funcionalidades Principales
 
@@ -57,19 +58,24 @@ El repositorio sigue una estructura monorepo lógica para facilitar la evaluaci�
 ## ⚖️ Trade-offs y Asunciones
 
 Durante el desarrollo, se tomaron las siguientes decisiones de diseño:
-- **Cálculo en Backend vs Frontend:** Se decidió que la lógica recursiva para sumar los puntos de esfuerzo resida en el backend (vía el endpoint de métricas). Esto asegura que el cliente (Nginx/Angular) se mantenga ligero y delegue el procesamiento pesado al servidor.
+
+- **Cálculo en Backend vs Frontend:** Se decidió que la lógica recursiva para sumar los puntos de esfuerzo resida en el backend (vía el endpoint de métricas).
+Esto asegura que el cliente (Nginx/Angular) se mantenga ligero y delegue el procesamiento pesado al servidor.
 - **SQLite vs Bases Externas:** Se optó por SQLite en lugar de un motor como PostgreSQL para eliminar la necesidad de contenedores adicionales.
 - **Separación visual del esfuerzo:** En la UI, la tarjeta individual muestra el esfuerzo propio de la tarea, mientras que el panel superior muestra el esfuerzo acumulado (padre + hijos). Esto se hizo intencionalmente para no confundir al usuario sobre la asignación directa vs. la carga global.
 
 ## 🛠️ Instalación y Ejecución
 
 ### Prerrequisitos
+
 Para ejecutar el proyecto de forma automatizada, asegúrate de tener instalado:
+
 - [Docker](https://www.docker.com/products/docker-desktop/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - Git
 
 ### Ejecución rápida (Recomendada)
+
 El proyecto está completamente dockerizado. Para levantar la base de datos, el backend y el frontend con un solo comando, ejecuta en la raíz del proyecto:
 
 \`\`\`bash
@@ -77,12 +83,14 @@ docker compose up --build
 \`\`\`
 
 Una vez que finalice la construcción de las imágenes, accede a:
-- **Frontend (UI):** http://localhost:8080
-- **Backend (API):** http://localhost:3000
+
+- **Frontend (UI):** <http://localhost:8080>
+- **Backend (API):** <http://localhost:3000>
 
 *Nota: Para detener los contenedores, utiliza `Ctrl + C` y luego ejecuta `docker compose down` para limpiar los recursos.*
 
 ### Ejecución local (Modo Desarrollo)
+
 Si prefieres ejecutar el proyecto sin Docker, necesitarás Node.js (v20+) y Angular CLI.
 
 **1. Levantar el Backend:**
@@ -101,7 +109,8 @@ cd frontend
 npm install
 ng serve
 \`\`\`
-*(El frontend estará disponible en http://localhost:4200).*
+
+*(El frontend estará disponible en <http://localhost:4200>).*
 
 ## 🤖 Desarrollo Asistido por IA
 
